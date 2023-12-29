@@ -2,11 +2,11 @@ const express = require('express')
 const { Socket } = require('socket.io')
 const app = express()
 const server = require('http').createServer(app)
-const io = require('socket.io')(server,{cors:{origin:"*"}})
+const io = require('socket.io')(server, {cors:{origin:"*"}})
 var util = require('util')
 const path = require('path')
 
-const port = 10000;
+const port = 3001;
 var users = []
 var messages = []
 
