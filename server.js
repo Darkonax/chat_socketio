@@ -6,7 +6,7 @@ const io = require('socket.io')(server,{cors:{origin:"*"}})
 var util = require('util')
 const path = require('path')
 
-const port = process.env.PORT || 3001;
+const port = 10000;
 var users = []
 var messages = []
 
