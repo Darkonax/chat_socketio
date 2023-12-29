@@ -57,7 +57,7 @@ $("#btnconnectid").on('click', () => {
 // Use function expression instead of function declaration
 const initConnection = () => {
 
-    socket = io('localhost:3001');
+    socket = io('http://localhost:10000', {secure: true});
 
     socket.io.on('error', (error) => {
         const message = {
