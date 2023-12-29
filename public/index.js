@@ -1,6 +1,7 @@
 
 
 let username = "";
+let port = ""
 let users = [];
 let socket;
 
@@ -35,34 +36,40 @@ $("#btnenviarid").on('click', () => {
 // Use arrow function for click event
 $("#btnconnectid").on('click', () => {
     const nick = $("#nicknameid").val();
-    if (nick.length < 3) {
+    if (nick.length < 3 || nick == "") {
         $("#alertid")
             .html("Coloque um Nome antes de prosseguir, mínimo 3 caracteres")
             .removeClass("border border-dark")
             .addClass("border border-danger");
     } else {
         username = $('#nicknameid').val().trim();
+        port = $('#portid').val().trim(); 
+
+        if(port == "" || port.length < 4){
+        $("#alertid")
+            .html("Coloque um port number, 4 caractere")
+            .removeClass("border border-dark")
+            .addClass("border border-danger");
+        }else{
         $("#nicknameid")
             .removeClass("border border-danger border-dark")
             .addClass("border border-primary")
             .attr("disabled", "disabled");
         $("#alertid")
-            .html("Trying to Connect to the Server ...")
+            .html(`Trying to Connect to the Server ... <i id="statusserverid" class="bi bi-circle-fill text-danger"></i>`)
             .removeClass("alert-danger")
             .addClass("alert-warning");
+        $('#portid')
+        .attr("disabled" , "disabled")
         initConnection();
+        }
     }
 });
 
 // Use function expression instead of function declaration
 const initConnection = () => {
 
-    socket = io('http://localhost:10000', {
-        withCredentials: true,
-        extraHeaders: {
-          "my-custom-header": "abcd"
-        }
-    });
+    socket = io(`http://localhost:${port}`);
 
     socket.io.on('error', (error) => {
         const message = {
@@ -74,10 +81,11 @@ const initConnection = () => {
     })
 
     socket.on('connect', () => {
+
         $("#alertid")
             .removeClass("alert-danger alert-warning")
             .addClass("alert-success")
-            .html("Connection Establishment");
+            .html(`Connection Establishment <i id="statusserverid" class="bi bi-circle-fill text-success"></i>`);
 
         $("#nicknameid, #btnconnectid").attr("disabled", "disabled");
 
@@ -109,13 +117,13 @@ const initConnection = () => {
 
 };
 
-// Use camelCase for function names
+
 const verifyOnlineUsers = () => {
     socket.emit('updateuser');
     scrollElement();
 };
 
-// Use camelCase for function names
+
 const displayOnlineUsers = () => {
     let html = "";
     users.forEach((user) => {
@@ -125,7 +133,7 @@ const displayOnlineUsers = () => {
     $("#userid").html($("#userid").html() + html);
 };
 
-// Use camelCase for function names and switch statement for message type
+
 const sendMessageToTextarea = (msg) => {
     const message = msg;
     switch (message.tipe) {
@@ -161,7 +169,7 @@ const sendMessageToTextarea = (msg) => {
     scrollElement();
 };
 
-// Use camelCase for function names
+
 const scrollElement = () => {
     var element = document.getElementById("Chatareaid");
     element.scrollTop = element.scrollHeight;
